@@ -1,0 +1,21 @@
+name: Trigger downstream tutorial sync
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: LucasRoesler/get-repo-owner-actions@v1.0
+        id: get_owner
+
+      - name: Trigger sync workflow
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{ steps.get_owner.outputs.owner }}/eunomia.dev
+          event-type: trigger-tutorial-sync
